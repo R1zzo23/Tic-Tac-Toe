@@ -1,0 +1,26 @@
+body {
+  text-align: center;
+}
+
+#setup {
+  margin-top: 2em;
+  height: 15em;
+  width: 40em;
+  background: lightblue;
+  border-radius: 1em;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+h1 {
+  margin-bottom: 0em;
+}
+
+.active {
+    background-color:red;
+    color: white;
+}
+
+button {
+  margin-bottom: 1em;
+}

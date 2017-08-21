@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Tic-Tac-Toe</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Font Awesome CDN -->
+    <link rel=StyleSheet href="custom.css" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+
+    <script>
+    var player;
+    var cpu;
+
+    $(document).ready(function() {
+      $('#choseX').addClass('active');
+
+      $('#choseX').click(function() {
+          $(this).toggleClass("active");
+          $('#choseO').toggleClass("active");
+      });
+      $('#choseO').click(function() {
+          $(this).toggleClass("active");
+          $('#choseX').toggleClass("active");
+      });
+    });
+
+    function startGame(){
+      //start by assigning turn values; X always goes first
+      if ($('#choseX').hasClass('active')) {
+        player = 1;
+        cpu = 2;
+      }
+      else {
+        cpu = 1;
+        player = 2;
+      }
+      document.getElementById('info').innerHTML = "Player: " + player + ", CPU: " + cpu;
+    }
+
+    </script>
+  </head>
+
+  <body ontouchstart="">
+    <div class="container-fluid text-center"> <!-- Beginning of Container -->
+      <div id="setup">
+        <div class="row">
+          <h1>Tic-Tac-Toe Game Setup</h1>
+        </div>
+        <div class="row">
+          <h3>Choose Your Side:</h3>
+        </div>
+        <div class="row">
+          <button id="choseX" active='true'>X</button> <button id="choseO">O</button>
+        </div>
+        <div class="row">
+          <button onclick="startGame()">Start Game</button> <button>Reset</button>
+        </div>
+      </div>
+      <div id="board">
+        <p id="info">Info Goes Here</p>
+      </div>
+    </div> <!-- End of Container -->
+  </body>
+</html>
