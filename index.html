@@ -19,8 +19,18 @@
     <script>
     var player;
     var cpu;
+    var playerSymbol;
+    var cpuSymbol;
+    var playersTurn;
+    var wins = 0;
+    var losses = 0;
+    var ties = 0;
+    var emptyBoxes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    var filledBoxes = [];
 
     $(document).ready(function() {
+      document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
+
       $('#choseX').addClass('active');
 
       $('#choseX').click(function() {
@@ -37,13 +47,78 @@
       //start by assigning turn values; X always goes first
       if ($('#choseX').hasClass('active')) {
         player = 1;
+        playerSymbol = "X";
         cpu = 2;
+        cpuSymbol = "O";
+        userTurn();
       }
       else {
         cpu = 1;
+        cpuSymbol = "X";
         player = 2;
+        playerSymbol = "O";
+        cpuTurn();
       }
-      document.getElementById('info').innerHTML = "Player: " + player + ", CPU: " + cpu;
+    }
+
+    function reset() {
+      $('#gameBoard td').each(function () {
+        console.log("Cleared a cell");
+        $(this).text("");
+      });
+      wins = 0;
+      losses = 0;
+      ties = 0;
+      document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
+      emptyBoxes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      filledBoxes = [];
+    }
+
+    function userTurn() {
+      playersTurn = true;
+    }
+
+    function cpuTurn() {
+      //check if CPU can win this turn
+
+
+      //check if player needs to be blocked from winning
+
+
+      //place a random symbol in an empty blocked
+      if (emptyBoxes.length > 0){
+        var randomIndex = Math.floor(Math.random() * ((emptyBoxes.length - 1) - 0 + 1)) + 0;
+        console.log(randomIndex);
+        document.getElementById(emptyBoxes[randomIndex]).innerHTML = cpuSymbol;
+
+        editEmptyAndFilled(emptyBoxes[randomIndex]);
+
+        playersTurn = true;
+      }
+    }
+
+    function selectBox (num) {
+      //if it's playersTurn and box is empty, put player's symbol in box
+      if (playersTurn == true && document.getElementById(num).innerHTML == "") {
+        document.getElementById(num).innerHTML = playerSymbol;
+        /*filledBoxes.push(num);
+        var index = emptyBoxes.indexOf(num);
+        emptyBoxes.splice(index, 1);*/
+        editEmptyAndFilled(num);
+      }
+      //check if player won
+
+      //switch to CPU's turn
+      playersTurn = false;
+      cpuTurn();
+    }
+
+    function editEmptyAndFilled(number){
+      filledBoxes.push(number);
+      var index = emptyBoxes.indexOf(number);
+      emptyBoxes.splice(index, 1);
+      console.log("Empty: " + emptyBoxes);
+      console.log("Filled: " + filledBoxes);
     }
 
     </script>
@@ -62,18 +137,33 @@
           <button id="choseX" active='true'>X</button> <button id="choseO">O</button>
         </div>
         <div class="row">
-          <button onclick="startGame()">Start Game</button> <button>Reset</button>
+          <button onclick="startGame()">Start Game</button> <button onclick="reset()">Reset</button>
         </div>
       </div>
       <div id="stats"?>
         <div class="row">
           <div class="col-xs-12">
-            <p id="record">Wins: 0 Losses: 0 Ties: 0</p>
+            <p id="record"></p>
           </div>
         </div>
       </div>
       <div id="board">
-        <p id="info">Info Goes Here</p>
+        <table id="gameBoard">
+          <tr id="top">
+            <td onclick="selectBox(1)" id="1" class="bottom right"></td>
+            <td onclick="selectBox(2)" id="2" class="left bottom right"></td>
+            <td onclick="selectBox(3)" id="3" class="left bottom"></td>
+          </tr>
+          <tr id="middle">
+            <td onclick="selectBox(4)" id="4" class="top right bottom"></td>
+            <td onclick="selectBox(5)" id="5" class="left top right bottom"></td>
+            <td onclick="selectBox(6)" id="6" class="top bottom left"></td>
+          </tr>
+          <tr id="bottom">
+            <td onclick="selectBox(7)" id="7" class="top right"></td>
+            <td onclick="selectBox(8)" id="8" class="left top right"></td>
+            <td onclick="selectBox(9)" id="9" class="left top"></td>
+          </tr>
       </div>
     </div> <!-- End of Container -->
   </body>
