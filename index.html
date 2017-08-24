@@ -101,16 +101,14 @@
       //if it's playersTurn and box is empty, put player's symbol in box
       if (playersTurn == true && document.getElementById(num).innerHTML == "") {
         document.getElementById(num).innerHTML = playerSymbol;
-        /*filledBoxes.push(num);
-        var index = emptyBoxes.indexOf(num);
-        emptyBoxes.splice(index, 1);*/
         editEmptyAndFilled(num);
-      }
-      //check if player won
 
-      //switch to CPU's turn
-      playersTurn = false;
-      cpuTurn();
+        //check if player won
+
+        //switch to CPU's turn
+        playersTurn = false;
+        cpuTurn();
+      }
     }
 
     function editEmptyAndFilled(number){
