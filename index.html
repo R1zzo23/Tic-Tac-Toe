@@ -73,19 +73,91 @@
       }
     }
 
-    function reset() {
+    function clearBoard() {
       $('#gameBoard td').each(function () {
         console.log("Cleared a cell");
         $(this).text("");
       });
-      wins = 0;
-      losses = 0;
-      ties = 0;
-      document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
+
       emptyBoxes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       filledBoxes = [];
       playerBoxes = [];
       cpuBoxes = [];
+    }
+
+    function reset() {
+
+      wins = 0;
+      losses = 0;
+      ties = 0;
+
+      updateWLRecord();
+
+      clearBoard();
+      userTurn = null;
+    }
+
+    function updateWLRecord() {
+      document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
+    }
+
+    function checkForWin(arr) {
+      var result = winArray.some(function(ar) {
+        return ar.every(function(e) {
+          return arr.indexOf(e) != -1
+        })
+      });
+      console.log("Result: " + result);
+      if (result) {
+        console.log("User Turn: " + playersTurn);
+        if (playersTurn) {
+          console.log("You have tic-tac-toe!");
+          alert("YOU WIN!");
+          wins++;
+        }
+        else {
+          console.log("CPU has tic-tac-toe!");
+          alert("YOU LOSE!");
+          losses++;
+        }
+        updateWLRecord();
+        playAgain();
+      }
+      /*if (result == true && userTurn == false) {
+        console.log("CPU has tic-tac-toe!");
+        alert("YOU LOSE!");
+        losses++;
+        updateWLRecord();
+        playAgain();
+      }
+      else if (result == true && userTurn == true) {
+        console.log("You have tic-tac-toe!");
+        alert("YOU WIN!");
+        wins++;
+        updateWLRecord();
+        playAgain();
+      }*/
+      else {
+        checkForDraw();
+      }
+    }
+
+    function checkForDraw() {
+      if (emptyBoxes.length == 0) {
+        alert("Game ended in a draw!");
+        ties++;
+        updateWLRecord();
+        playAgain();
+      }
+    }
+
+    function playAgain(){
+      if (confirm("Would you like to play again?")) {
+        clearBoard();
+      }
+      else {
+        reset();
+      }
     }
 
     function userTurn() {
@@ -106,19 +178,10 @@
         document.getElementById(emptyBoxes[randomIndex]).innerHTML = cpuSymbol;
 
         editEmptyAndFilled(emptyBoxes[randomIndex]);
+        console.log("CPU Boxes: " + cpuBoxes);
 
         //check if CPU won
-        var result = winArray.some(function(ar) {
-          return ar.every(function(e) {
-            return cpuBoxes.indexOf(e) != -1
-          })
-        });
-        console.log("Result: " + result);
-        if (result) {
-          alert("YOU LOSE!");
-          losses++;
-          document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
-        }
+        checkForWin(cpuBoxes);
 
         playersTurn = true;
       }
@@ -129,20 +192,10 @@
       if (playersTurn == true && document.getElementById(num).innerHTML == "") {
         document.getElementById(num).innerHTML = playerSymbol;
         editEmptyAndFilled(num);
+        console.log("Player Boxes: " + playerBoxes);
 
         //check if player won
-        var result = winArray.some(function(ar) {
-          return ar.every(function(e) {
-            return playerBoxes.indexOf(e) != -1
-          })
-        });
-
-        if (result) {
-          alert("YOU WIN!");
-          wins++;
-          document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
-
-        }
+        checkForWin(playerBoxes);
 
         //switch to CPU's turn
         playersTurn = false;
@@ -162,21 +215,6 @@
         cpuBoxes.push(number);
       }
     }
-
-    /*function checkForWin(current, win) {
-      var combLength = 0;
-      for (var i in winArray) {
-        combLength = winArray.length;
-        for (var j in winArray[i]) {
-          if (-1 == current.indexOf(winArray[i][j])) {
-            break;
-          }
-        }
-        if (combLength - 1 == j) {
-          alert("Win!");
-        }
-      }
-  }*/
 
     </script>
   </head>
