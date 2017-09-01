@@ -73,6 +73,9 @@
         playerSymbol = '<img height="65em" width="65em" src="images/o-piece.png">';
         cpuTurn();
       }
+      document.getElementById('startButton').disabled = true;
+      document.getElementById('choseX').disabled = true;
+      document.getElementById('choseO').disabled = true;
     }
 
     function clearBoard() {
@@ -99,6 +102,9 @@
 
       clearBoard();
       userTurn = null;
+      document.getElementById('startButton').disabled = false;
+      document.getElementById('choseX').disabled = false;
+      document.getElementById('choseO').disabled = false;
     }
 
     function updateWLRecord() {
@@ -268,7 +274,7 @@
           <button id="choseX" active='true'>X</button> <button id="choseO">O</button>
         </div>
         <div class="row">
-          <button onclick="startGame()">Start Game</button> <button onclick="reset()">Reset</button>
+          <button id="startButton" onclick="startGame()">Start Game</button> <button onclick="reset()">Reset</button>
         </div>
       </div>
       <div id="stats"?>
