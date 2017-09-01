@@ -44,7 +44,7 @@
 
     $(document).ready(function() {
       document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
-
+      document.getElementById('resetButton').disabled = true;
       $('#choseX').addClass('active');
 
       $('#choseX').click(function() {
@@ -76,6 +76,7 @@
       document.getElementById('startButton').disabled = true;
       document.getElementById('choseX').disabled = true;
       document.getElementById('choseO').disabled = true;
+      document.getElementById('resetButton').disabled = false;
     }
 
     function clearBoard() {
@@ -105,6 +106,7 @@
       document.getElementById('startButton').disabled = false;
       document.getElementById('choseX').disabled = false;
       document.getElementById('choseO').disabled = false;
+      document.getElementById('resetButton').disabled = true;
     }
 
     function updateWLRecord() {
@@ -274,7 +276,7 @@
           <button id="choseX" active='true'>X</button> <button id="choseO">O</button>
         </div>
         <div class="row">
-          <button id="startButton" onclick="startGame()">Start Game</button> <button onclick="reset()">Reset</button>
+          <button id="startButton" onclick="startGame()">Start Game</button> <button id="resetButton" onclick="reset()">Reset</button>
         </div>
       </div>
       <div id="stats"?>
