@@ -39,6 +39,8 @@
       [1, 5, 9],
       [3, 5, 7]
     ];
+    var delayMillis = 100;
+
 
     $(document).ready(function() {
       document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
@@ -59,23 +61,22 @@
       //start by assigning turn values; X always goes first
       if ($('#choseX').hasClass('active')) {
         player = 1;
-        playerSymbol = "X";
+        playerSymbol = '<img height="65em" width="65em" src="images/x-piece.png">';
         cpu = 2;
-        cpuSymbol = "O";
+        cpuSymbol = '<img height="65em" width="65em" src="images/o-piece.png">';
         userTurn();
       }
       else {
         cpu = 1;
-        cpuSymbol = "X";
+        cpuSymbol = '<img src="images/x-piece.png">';
         player = 2;
-        playerSymbol = "O";
+        playerSymbol = '<img src="images/o-piece.png">';
         cpuTurn();
       }
     }
 
     function clearBoard() {
       $('#gameBoard td').each(function () {
-        console.log("Cleared a cell");
         $(this).text("");
       });
 
@@ -83,6 +84,9 @@
       filledBoxes = [];
       playerBoxes = [];
       cpuBoxes = [];
+      if (!playersTurn) {
+        cpuTurn();
+      }
     }
 
     function reset() {
@@ -101,42 +105,46 @@
       document.getElementById('record').innerHTML = "Wins: " + wins + " Losses: " + losses + " Ties: " + ties;
     }
 
+    function canMoveWin(arr) {
+      var winBox;
+      for (var i = 0; i < winArray.length; i++) {
+        var count = 0;
+        for (var j = 0; j < winArray[i].length; j++) {
+          if (arr.indexOf(winArray[i][j]) !== -1) {
+            count++;
+          }
+          else {
+            winBox = winArray[i][j];
+          }
+        }
+        if (count == 2 && winBox !== null && document.getElementById(winBox).innerHTML == "") {
+          return winBox;
+        }
+      }
+    }
+
     function checkForWin(arr) {
       var result = winArray.some(function(ar) {
         return ar.every(function(e) {
           return arr.indexOf(e) != -1
         })
       });
-      console.log("Result: " + result);
       if (result) {
-        console.log("User Turn: " + playersTurn);
         if (playersTurn) {
-          console.log("You have tic-tac-toe!");
-          alert("YOU WIN!");
+          setTimeout(function() {
+            alert("YOU WIN!");
+          }, delayMillis);
           wins++;
         }
         else {
-          console.log("CPU has tic-tac-toe!");
-          alert("YOU LOSE!");
+          setTimeout(function() {
+            alert("YOU LOSE!");
+          }, delayMillis);
           losses++;
         }
         updateWLRecord();
         playAgain();
       }
-      /*if (result == true && userTurn == false) {
-        console.log("CPU has tic-tac-toe!");
-        alert("YOU LOSE!");
-        losses++;
-        updateWLRecord();
-        playAgain();
-      }
-      else if (result == true && userTurn == true) {
-        console.log("You have tic-tac-toe!");
-        alert("YOU WIN!");
-        wins++;
-        updateWLRecord();
-        playAgain();
-      }*/
       else {
         checkForDraw();
       }
@@ -144,20 +152,33 @@
 
     function checkForDraw() {
       if (emptyBoxes.length == 0) {
-        alert("Game ended in a draw!");
+        setTimeout(function() {
+          alert("Game ended in a draw!");
+        }, delayMillis);
         ties++;
         updateWLRecord();
         playAgain();
       }
+      else {
+        if (playersTurn) {
+          playersTurn = false;
+          cpuTurn();
+        }
+        else {
+          playersTurn = true;
+        }
+      }
     }
 
     function playAgain(){
-      if (confirm("Would you like to play again?")) {
-        clearBoard();
-      }
-      else {
-        reset();
-      }
+      setTimeout(function() {
+        if (confirm("Would you like to play again?")) {
+          clearBoard();
+        }
+        else {
+          reset();
+        }
+      }, delayMillis);
     }
 
     function userTurn() {
@@ -166,24 +187,34 @@
 
     function cpuTurn() {
       //check if CPU can win this turn
-
+      if (canMoveWin(cpuBoxes) >= 1) {
+        var num = canMoveWin(cpuBoxes);
+        document.getElementById(num).innerHTML = cpuSymbol;
+        editEmptyAndFilled(num);
+        checkForWin(cpuBoxes);
+        //playersTurn = true;
+      }
 
       //check if player needs to be blocked from winning
-
+      else if (canMoveWin(playerBoxes) >= 1) {
+        var num = canMoveWin(playerBoxes);
+        document.getElementById(num).innerHTML = cpuSymbol;
+        editEmptyAndFilled(num);
+        checkForWin(cpuBoxes);
+        //playersTurn = true;
+      }
 
       //place a random symbol in an empty blocked
-      if (emptyBoxes.length > 0){
+      else if (emptyBoxes.length > 0){
         var randomIndex = Math.floor(Math.random() * ((emptyBoxes.length - 1) - 0 + 1)) + 0;
-        console.log(randomIndex);
         document.getElementById(emptyBoxes[randomIndex]).innerHTML = cpuSymbol;
 
         editEmptyAndFilled(emptyBoxes[randomIndex]);
-        console.log("CPU Boxes: " + cpuBoxes);
 
         //check if CPU won
         checkForWin(cpuBoxes);
 
-        playersTurn = true;
+        //playersTurn = true;
       }
     }
 
@@ -192,14 +223,15 @@
       if (playersTurn == true && document.getElementById(num).innerHTML == "") {
         document.getElementById(num).innerHTML = playerSymbol;
         editEmptyAndFilled(num);
-        console.log("Player Boxes: " + playerBoxes);
 
         //check if player won
         checkForWin(playerBoxes);
 
         //switch to CPU's turn
-        playersTurn = false;
-        cpuTurn();
+        /*if (!checkForWin(playerBoxes)) {
+          playersTurn = false;
+          cpuTurn();
+        }*/
       }
     }
 
@@ -214,6 +246,10 @@
       else if (!playersTurn) {
         cpuBoxes.push(number);
       }
+
+      setTimeout(function() {
+        //your code to be executed after 1 second
+      }, delayMillis);
     }
 
     </script>
@@ -243,7 +279,7 @@
         </div>
       </div>
       <div id="board">
-        <table id="gameBoard">
+        <table id="gameBoard" class="text-center">
           <tr id="top">
             <td onclick="selectBox(1)" id="1" class="bottom right"></td>
             <td onclick="selectBox(2)" id="2" class="left bottom right"></td>

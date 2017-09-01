@@ -3,13 +3,13 @@ body {
 }
 
 #setup {
-  margin-top: 2em;
+  margin-top: .2em;
   height: 15em;
   width: 35em;
   background: lightblue;
   border-radius: 1em;
   text-align: center;
-  margin-bottom: 1em;
+  margin-bottom: .2em;
 }
 
 #stats {
@@ -29,14 +29,18 @@ body {
 #board {
   margin-top: .2em;
   text-align: center;
-  width: 36em;
-  height: 36em;
-  background-color: green;
+  width: 35em;
+  height: 35em;
+  border-radius: 1em;
+}
+
+#gameBoard {
+  margin: 0 auto;
 }
 
 td {
-  height: 6em;
-  width: 6em;
+  height: 8em;
+  width: 8em;
   background-color: #f67c84;
 }
 
